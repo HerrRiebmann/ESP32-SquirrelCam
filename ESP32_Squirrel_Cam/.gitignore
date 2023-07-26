@@ -1,0 +1,5 @@
+## compiled binaries
+*.hex
+*.bin
+## Image folder for Readme.md
+Images/

@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>ESP32 Squirrel Cam - Livestream</title>
+		<meta charset="UTF-8" />	  
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" type="text/css" href="style.css" />
+      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+      <link rel="icon" href="favicon.ico" type="image/x-icon" />      
+	  <script src="stream.js"></script>
+	</head>	
+<body>
+<div class="setupDiv">
+	<img src="/web/favicon.ico" width="100%" id="ImgStream" style="display: none;" class="picture" hidden>
+	<img src="/jpg" width="100%" id="ImgStatic" class="picture">	   
+</div>
+<p>   
+   <button onclick="Toggle()" id="StreamBtn">Stream</button>
+   <button onclick="Toggle()" id="PictureBtn" style="display: none;">Picture</button>   
+   <button onclick="Refresh()" id="RefreshBtn">Refresh</button>
+   <button onclick="Flash()" id="FlashBtn">Flash</button>
+   <button onclick="Save()" id="SaveBtn">Save</button>
+   </p>
+</body>
+</html>

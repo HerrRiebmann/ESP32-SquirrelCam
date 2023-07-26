@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>Bike Diagnostic Sniffer</title>
+		<meta charset="UTF-8" />	  
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" type="text/css" href="style.css" />
+      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+      <link rel="icon" href="favicon.ico" type="image/x-icon" />
+      <script src="main.js"></script>
+	</head>
+<body OnLoad="GetInfo()">
+<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+<div class="setupDiv">
+	<div class="settings" id="espinfo" style="margin: 0 auto;">
+	</div>
+</div>
+<p>
+<button onClick="GetInfo()" id="SaveBtn">Refresh</button><br />
+<span id="Output" class="outputSpan"></span>	
+</p>
+</body>
+</html>

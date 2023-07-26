@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>Bike Diagnostic Sniffer</title>
+		<meta charset="UTF-8" />	  
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" type="text/css" href="style.css" />
+      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+      <link rel="icon" href="favicon.ico" type="image/x-icon" />
+      <script src="main.js"></script>
+	</head>
+<body OnLoad="SetSetup(false)">
+<div class="setupDiv">
+	<div class="settings" style="margin: 0 auto;">				
+		<label for="serial_enabled">Serial</label><input type="checkbox" id="serial_enabled">
+		<label for="ota_enabled">OTA</label><input type="checkbox" id="ota_enabled">
+		<label for="webserver_enabled">Webserver</label><input type="checkbox" id="webserver_enabled">
+		<label for="force_accesspoint">Force AP</label><input type="checkbox" id="force_accesspoint">
+		 <label for="ssidOption">SSID</label>
+			<select id="ssidOption" onchange="UpdateSSID()">
+		</select>
+		<label for="ssid">SSID</label><input type="text" id="ssid">
+		<label for="password">Password</label><input type="password" id="password">
+	</div>
+</div>
+<p>
+<button onClick="SetSetup(true)" id="SaveBtn">Save</button><br />
+<span id="Output" class="outputSpan"></span>
+<p><button onClick="Restart()" id="RestartBtn">Reboot</button><p />
+</p>
+<input type="checkbox" id="wireless_serial" OnClick="SerialMonitor()">Serial Monitor</input><br>
+<textarea readonly rows="10", cols="70" id="wireless_serial_text"></textarea>
+</body>
+</html>

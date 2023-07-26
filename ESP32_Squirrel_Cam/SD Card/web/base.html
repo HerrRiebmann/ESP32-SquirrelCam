@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>ESP32 Template</title>
+		<meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" type="text/css" href="style.css" />
+      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+      <link rel="icon" href="favicon.ico" type="image/x-icon" />
+      <script src="base.js"></script>
+	</head>
+<body OnLoad="GetData()">
+<div class="setupDiv">
+	<div class="settings" style="margin: 0 auto;">
+		<label for="highRes">Cam High Resolution</label><input type="checkbox" id="highRes">
+		<label for="skipDeepsleep">Skip Deepsleep</label><input type="checkbox" id="skipDeepsleep">
+		<label for="deepSleep">Deepsleep (<span id="intText" style="font-weight:bold;color:#008CBA">120</span>sec)</label><input type="range" id="deepSleep" min="0" max="1200" step="10">
+		<label for="pirActive">PIR Active</label><input type="checkbox" id="pirActive">
+	</div>
+</div>
+<p>
+<button onClick="SetData()" id="SaveBtn">Save</button><br />
+<button onClick="ToggleLed()" id="ToggleBtn">Toggle LED</button><br />
+<button onClick="SendToSleep()" id="SleepBtn">Send to Deepsleep</button><br />
+<span id="Output" class="outputSpan"></span>	
+</p>
+</body>
+</html>

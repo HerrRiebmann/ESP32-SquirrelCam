@@ -15,26 +15,6 @@ void InitCam() {
   CameraActivated = true;
 }
 
-void CheckIdle() {
-  if (photoWakeup && WiFiConnected) {
-    savePhoto();
-    if (lastPhotoFilename != "") {
-      SendPhotoFromSD(lastPhotoFilename);
-      photoWakeup = false;
-      lastPhotoFilename = "";
-    }
-  }
-
-  if (!skipDeepsleep)
-    if (millis() - lastActionTime > idleTresholdSeconds * 1000)
-      SentToDeepSleep();
-
-  if (!WirelessSerial)
-    return;
-  if (millis() - LastWirelessSerial > 5000)
-    WirelessSerial = false;
-}
-
 // Function to set timezone
 void setTimezone(String timezone) {
   Serial.printf("  Setting Timezone to %s\n", timezone.c_str());

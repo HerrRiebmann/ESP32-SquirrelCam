@@ -29,6 +29,11 @@ void CheckWakeupMode() {
       //Take a picture
       photoWakeup = true;
       takePhoto();
+      //Start Test optimize overexposion
+      esp_camera_fb_return(fb);
+      delay(50);
+      takePhoto();
+      //End Test
       idleTresholdSeconds = 20;
       break;
     case ESP_SLEEP_WAKEUP_TIMER : //Wakeup caused by timer

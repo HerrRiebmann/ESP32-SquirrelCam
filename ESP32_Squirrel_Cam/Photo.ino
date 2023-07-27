@@ -6,7 +6,12 @@ String getPictureFilename() {
   getLocalTime(&timeinfo);
   char timeString[20];
   strftime(timeString, sizeof(timeString), "%Y-%m-%d_%H-%M-%S", &timeinfo);
-  String filename = "/Photos/picture_" + String(timeString) + ".jpg";
+  String filename = PictureFolder;
+  filename.concat("/picture_" + String(timeString) + ".jpg");
+  
+  if(!GetFS().exists(PictureFolder))
+    GetFS().mkdir(PictureFolder);
+  
   return filename;
 }
 
@@ -65,7 +70,7 @@ void savePhoto() {
 
 void SendLastPhoto() {
   PrintMessageLn("Get Files:");
-  File file = GetFS().open("/Photos");
+  File file = GetFS().open(PictureFolder);
   if (!file) {
     PrintMessageLn("Path not found!");
     return;

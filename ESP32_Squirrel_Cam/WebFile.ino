@@ -214,13 +214,12 @@ bool sendDirectory(String path) {
 }
 
 bool sendImages() {
-  PrintMessageLn("Send Images");
-  String path = "/Photos";
+  PrintMessageLn("Send Images");  
   String subdir;
   String parent;
   String name;
 
-  File dirFile = GetFS().open(path, FILE_READ);
+  File dirFile = GetFS().open(PictureFolder, FILE_READ);
   if (dirFile) {
     PrintMessageLn(dirFile.name());
     webServer.setContentLength(CONTENT_LENGTH_UNKNOWN);

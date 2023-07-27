@@ -238,9 +238,8 @@ void handle_esp() {
   webServer.send(200, "text/plain", temp);
 }
 
-void handle_serial() {
-  WirelessSerial = true;
-  LastWirelessSerial = millis();
+void handle_serial() {  
+  ResetIdleTime();
   webServer.send(200, "text/plain", SerialData);
   SerialData = "";
 }
@@ -268,6 +267,8 @@ void redirect() {
 }
 
 void PrintIncomingRequest() {
+  ResetIdleTime();
+  
   PrintMessageLn(webServer.hostHeader());
   PrintMessage("  ");
   PrintMessageLn(webServer.uri());
@@ -293,6 +294,8 @@ boolean isIp(String str) {
 }
 
 void ProcessSetupArguments() {
+  ResetIdleTime();
+  
   bool valuesChanged = false;
   for (uint8_t i = 0; i < webServer.args(); i++) {
     PrintMessageLn(String(F(" ")) + webServer.argName(i) + F(": ") + webServer.arg(i));

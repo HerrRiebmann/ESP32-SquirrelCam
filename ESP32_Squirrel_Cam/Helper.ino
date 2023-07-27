@@ -38,3 +38,27 @@ void SwitchOnBoardLed(bool state) {
   PrintMessageLn(state ? "LED: On" : "LED: Off");
   LedState = state;
 }
+
+void CheckIdle() {
+  if (photoWakeup && WiFiConnected) {
+    savePhoto();
+    if (lastPhotoFilename != "") {
+      SendPhotoFromSD(lastPhotoFilename);
+      photoWakeup = false;
+      lastPhotoFilename = "";
+    }
+  }
+
+  if (!skipDeepsleep)
+    if (millis() - lastActionTime > idleTresholdSeconds * 1000)
+      SentToDeepSleep();
+
+  //5 Min on idle: Deepsleep!
+  if (skipDeepsleep)
+    if (millis() - lastActionTime > 5 * 60 * 1000)
+      SentToDeepSleep();
+}
+
+void ResetIdleTime() {
+  lastActionTime = millis();
+}

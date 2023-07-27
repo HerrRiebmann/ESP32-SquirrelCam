@@ -57,10 +57,6 @@ void handleNewMessages(int numNewMessages) {
       esp_camera_fb_return(fb);
     }
 
-    if (text == "/echo") {
-      bot.sendMessage(chat_id, "Hello World!", "");
-    }
-
     if (text == "/wakeup") {
       SkipDeepsleep();
       bot.sendMessage(chat_id, "Squirrel Cam is alive!", "");
@@ -99,14 +95,14 @@ void handleNewMessages(int numNewMessages) {
       welcome += "/photo :  will take a photo\n";
       welcome += "/last :     sends last photo taken\n";
       welcome += "/flash :   toggle flash LED (_VERY BRIGHT!_)\n";
-      welcome += "/state :   sends current ESP32 state\n";
-      //welcome += "/echo :   will send a text message\n";
+      welcome += "/state :   sends current ESP32 state\n";      
       welcome += "/sleep :   send ESP into deepsleep\n";
       welcome += "/wakeup : waking ESP up, on next iteration\n";
       welcome += "/webserver : start (_or end_) to access images and settings\n";
       bot.sendMessage(chat_id, welcome, "Markdown");
     }
   }
+  ResetIdleTime();
 }
 String sendPhotoTelegram() {
   if (initTelegramTransfer()) {

@@ -12,6 +12,8 @@
 #include <WiFiClientSecure.h>
 #include <WebServer.h>
 #include <ESPmDNS.h>
+#include <ArduinoOTA.h>
+#include <Preferences.h>
 #include <DNSServer.h>
 #include "esp_camera.h"
 #include "camera.h"
@@ -20,11 +22,10 @@
 #include "soc/soc.h"           // Disable brownout problems
 #include "soc/rtc_cntl_reg.h"  // Disable brownout problems
 #include "driver/rtc_io.h"
+#include "time.h"
 #include <UniversalTelegramBot.h>
 #include <ArduinoJson.h>
-#include "time.h"
 #include "Credentials.h"
-#include <ArduinoOTA.h>
 
 //#define TELEGRAM_DEBUG
 //#define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
@@ -32,7 +33,6 @@
 #define FLASH_LED_PIN 4
 #define BUTTON_PIN 12
 #define LED_BUILTIN 33
-
 #define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
 
 WiFiClientSecure secured_client;
@@ -74,15 +74,12 @@ const char* TelegramDomain = "api.telegram.org";
 String myTimezone = "CET-1CEST,M3.5.0,M10.5.0/3";
 
 //Settings
-#include <Preferences.h>
 Preferences settings;
 bool Serial_Enabled = true;
 bool OTA_Enabled = true;
 bool Webserver_Enabled = true;
 bool Force_Accesspoint = false;
 
-bool WirelessSerial = false;
-long LastWirelessSerial = 0;
 String SerialData = "";
 const int SerialDataMaxSize = 1000;
 
@@ -111,6 +108,8 @@ String currentChat_Id;
 bool startWebserver = false;
 
 bool LedState = true;
+
+const String PictureFolder = "/Photos";
 
 void setup() {
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); // disable brownout detector

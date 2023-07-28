@@ -67,6 +67,7 @@ void InitFilesystem() {
   switch (Filesystem) {
     case None:
       FSinitialized = false;
+      break;
     case Spiffs:
       FSinitialized = false;
       //FSinitialized = SPIFFS.begin(true);

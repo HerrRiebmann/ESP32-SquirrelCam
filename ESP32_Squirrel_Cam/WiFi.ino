@@ -31,6 +31,7 @@ void WiFiStateLoop() {
     }
     InitTelegramBot();
     SendStatus();
+    ResetIdleTime();
     return;
   }
 

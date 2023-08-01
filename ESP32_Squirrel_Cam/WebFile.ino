@@ -49,6 +49,7 @@ void handleFileRead() {
     PrintMessageLn("Skip Deepsleep due to webserver!");
     skipDeepsleep = true;
   }
+  ResetIdleTime();
 
   if (IsFileList(path))
     return;

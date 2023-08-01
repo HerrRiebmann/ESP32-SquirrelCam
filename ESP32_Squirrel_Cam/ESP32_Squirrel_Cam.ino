@@ -97,6 +97,7 @@ bool TriggerState = HIGH; //LOW; //HIGH for PIR, LOW for Button
 
 bool skipDeepsleep = false;
 uint16_t secondsToSleep = 2 * 60;
+uint16_t secondsToSleepOnIdle = 5 * 60;
 bool sendToDeepsleepAfterMsgConfirm = false;
 //*** IDLE check ***
 unsigned long lastActionTime;
@@ -137,6 +138,7 @@ void setup() {
   if (OTA_Enabled)
     SetupOTA();
   CheckWakeupMode();
+  ResetIdleTime();
 }
 
 void loop() {

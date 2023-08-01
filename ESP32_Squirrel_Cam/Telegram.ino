@@ -91,11 +91,11 @@ void handleNewMessages(int numNewMessages) {
       SendStatus(chat_id, "Current ESP State");
 
     if (text == "/start" || text == "/info")    {
-      String welcome = "Welcome to the *ESP32 Squirrel-Cam* Telegram bot.\n\n";
+      String welcome = "Welcome to the *ESP32 Squirrel-Cam* Telegram Bot.\n\n";
       welcome += "/photo :  will take a photo\n";
-      welcome += "/last :     sends last photo taken\n";
-      welcome += "/flash :   toggle flash LED (_VERY BRIGHT!_)\n";
-      welcome += "/state :   sends current ESP32 state\n";      
+      welcome += "/last :      sends last photo taken\n";
+      welcome += "/flash :    toggle flash LED (_VERY BRIGHT!_)\n";
+      welcome += "/state :    sends current ESP32 state\n";      
       welcome += "/sleep :   send ESP into deepsleep\n";
       welcome += "/wakeup : waking ESP up, on next iteration\n";
       welcome += "/webserver : start (_or end_) to access images and settings\n";
@@ -170,6 +170,11 @@ void SendStatus(String chatId, String Text) {
   statusText.concat(skipDeepsleep ? "Skipped" : "Active");
   statusText.concat("</b>");
   statusText.concat(" (" + String(secondsToSleep) + "sec)");
+  if(skipDeepsleep){
+    statusText.concat("\nAlive: <b>");   
+    statusText.concat(String((millis() - lastActionTime) / 1000) + "/" + String(secondsToSleepOnIdle));
+    statusText.concat("</b>");
+  }
   if (fb != NULL) {
     statusText.concat("\nFileBuffer: <b>");
     statusText.concat(fb->len);
@@ -179,7 +184,8 @@ void SendStatus(String chatId, String Text) {
     statusText.concat("\nPhoto: <b>");
     statusText.concat(lastPhotoFilename);
     statusText.concat("</b>");
-  }
+  }  
+  
   bot.sendMessage(chatId, statusText, "HTML");
   //bot.sendMessage(chatId, statusText, "Markdown");
 

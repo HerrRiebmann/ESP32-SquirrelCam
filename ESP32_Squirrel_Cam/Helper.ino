@@ -55,7 +55,7 @@ void CheckIdle() {
 
   //5 Min on idle: Deepsleep!
   if (skipDeepsleep)
-    if (millis() - lastActionTime > 5 * 60 * 1000)
+    if (millis() - lastActionTime > secondsToSleepOnIdle * 1000)
       SentToDeepSleep();
 }
 

@@ -47,4 +47,6 @@ void StreamingLoop() {
   streamingClient.write(buf, strlen(buf));
   streamingClient.write((char *)fb->buf, s);
   streamingClient.write(BOUNDARY, bdrLen);
+
+  ResetIdleTime();
 }

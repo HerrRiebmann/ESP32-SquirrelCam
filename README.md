@@ -4,6 +4,11 @@ ESP32 Cam Modul as a Squirrel camera trap
 A PIR detects movement and takes a picture. This will be stored onto the SD-Card.
 Afterwards, it will be transferred to a Telegram Bot. This Bot also can control the ESP32.
 
+> :warning: **Attention:** The Cam does not work properly with the ESP32 Firmware above 2.0.X!!!
+Streaming reboots the ESP, image is blue and blurry, connection is not reliable.
+Use 1.0.6 instead.
+
+
 ### Description
 Some squirrels were walking over my balcony, the other day. So my first intention was to make friends with and feed them.
 So I bought a feeding house, which should prevent the nuts from being eaten by birds:
@@ -90,4 +95,5 @@ To create a Telegram Bot, you need to follow some steps:
 
 Afterwards, you receive a Token, which must be stored. And the Bot-URL. You can add the Bot to a Chat by following this URL.
 Ensure to setup the Bot to not be added by groups and set some security settings!
+It´s also recommended to also set the command-list with the BotFather. Then you will have a menu with command buttons within your chat.
 I can recommend to follow this [RandomNerdTutorial](https://randomnerdtutorials.com/telegram-control-esp32-esp8266-nodemcu-outputs/)

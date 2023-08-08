@@ -98,6 +98,10 @@ void handle_base() {
   txt.concat(String(secondsToSleep));
   txt.concat("|");
   txt.concat(String(PirActive));  
+  txt.concat("|");
+  txt.concat(String(hourToSleep));  
+  txt.concat("|");
+  txt.concat(String(hourToKeepAwake));  
   PrintMessageLn(txt);
   webServer.send(200, "text/plain", txt);
 }
@@ -322,6 +326,10 @@ void ProcessSetupArguments() {
       secondsToSleep = webServer.arg(i).toInt();
     if (webServer.argName(i).compareTo(F("pirActive")) == 0)
       PirActive = webServer.arg(i) == "1";
+    if (webServer.argName(i).compareTo(F("hourToSleep")) == 0)
+      hourToSleep = webServer.arg(i).toInt();
+    if (webServer.argName(i).compareTo(F("hourToKeepAwake")) == 0)
+      hourToKeepAwake = webServer.arg(i).toInt();
 
     valuesChanged = true;
   }

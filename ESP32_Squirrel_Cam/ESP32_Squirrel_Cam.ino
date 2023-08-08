@@ -99,6 +99,8 @@ bool skipDeepsleep = false;
 uint16_t secondsToSleep = 2 * 60;
 uint16_t secondsToSleepOnIdle = 5 * 60;
 bool sendToDeepsleepAfterMsgConfirm = false;
+int hourToSleep = 7;
+int hourToKeepAwake = 21;
 //*** IDLE check ***
 unsigned long lastActionTime;
 uint8_t idleTresholdSeconds = 30;

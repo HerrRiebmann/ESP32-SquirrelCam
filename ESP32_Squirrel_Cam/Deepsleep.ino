@@ -26,6 +26,8 @@ void CheckWakeupMode() {
     case ESP_SLEEP_WAKEUP_TOUCHPAD : //Wakeup caused by touchpad
     case ESP_SLEEP_WAKEUP_ULP : //Wakeup caused by ULP program
     case ESP_SLEEP_WAKEUP_EXT1 : //Wakeup caused by external signal using RTC_CNTL
+      if(!PirActive)
+        return;
       //Take a picture
       photoWakeup = true;
       takePhoto();
@@ -49,6 +51,17 @@ void CheckWakeupMode() {
 
 void SentToDeepSleep() {
   skipDeepsleep = false;
+  if(TimeInitialized){
+    struct tm timeinfo;
+    getLocalTime(&timeinfo);    
+    if(timeinfo.tm_hour >= hourToKeepAwake && timeinfo.tm_hour <= hourToSleep){
+      if (hourToSleep > timeinfo.tm_hour)
+          secondsToSleep = (((hourToSleep - timeinfo.tm_hour) * 60) - timeinfo.tm_min) * 60;
+        else
+          secondsToSleep = ((((24 - timeinfo.tm_hour) + hourToSleep) * 60) - timeinfo.tm_min) * 60;
+     //PrintMessageLn("Don´t wakup for: %02d:%02d\n", (int)(secondsToSleep / 60 / 60), (int)(secondsToSleep / 60 % 60));
+    }
+  }
   esp_sleep_enable_timer_wakeup((uint64_t)secondsToSleep * uS_TO_S_FACTOR);
 
   PrintMessageLn("Going to sleep now for " + String(secondsToSleep) + " Seconds");

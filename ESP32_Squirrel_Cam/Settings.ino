@@ -14,6 +14,9 @@ void InitSettings() {
   secondsToSleep = settings.getInt("deepSleep", secondsToSleep);
   PirActive = settings.getBool("PirActive", PirActive);
 
+  hourToSleep = settings.getInt("hourToSleep", hourToSleep);
+  hourToKeepAwake = settings.getInt("hourToKeepAwake", hourToKeepAwake);
+
   settings.end();
   PrintMessageLn("Setting Loaded");
   PrintSettings();
@@ -32,6 +35,8 @@ void StoreSettings() {
   settings.putBool("highRes", CamHighRes);  
   settings.putInt("deepSleep", secondsToSleep);
   settings.putBool("PirActive", PirActive);    
+  settings.putInt("hourToSleep", hourToSleep);
+  settings.putInt("hourToKeepAwake", hourToKeepAwake);
 
   settings.end();
   PrintMessageLn("Settings Stored");

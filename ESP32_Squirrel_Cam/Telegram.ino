@@ -83,6 +83,13 @@ void handleNewMessages(int numNewMessages) {
         skipDeepsleep = true;
       }
     }
+
+    if(text == "/pir"){
+      PirActive = !PirActive;
+      StoreSettings();
+      bot.sendMessage(chat_id, "PIR is now " + String(!PirActive? "de" : "") + "activated!", "");
+      
+    }
     
     if (text == "/last")
       SendLastPhoto();
@@ -95,7 +102,8 @@ void handleNewMessages(int numNewMessages) {
       welcome += "/photo :  will take a photo\n";
       welcome += "/last :      sends last photo taken\n";
       welcome += "/flash :    toggle flash LED (_VERY BRIGHT!_)\n";
-      welcome += "/state :    sends current ESP32 state\n";      
+      welcome += "/state :    sends current ESP32 state\n";
+      welcome += "/pir :       (de-)activate the presence detector\n";
       welcome += "/sleep :   send ESP into deepsleep\n";
       welcome += "/wakeup : waking ESP up, on next iteration\n";
       welcome += "/webserver : start (_or end_) to access images and settings\n";
@@ -161,10 +169,16 @@ void SendStatus(String chatId, String Text) {
   statusText.concat("SD-Card: <b>");
   statusText.concat(FSinitialized ? "Initialized" : "Failed");
   statusText.concat("</b>\n");
+  statusText.concat("PIR-Sensor: <b>");
+  statusText.concat(PirActive ? "Active" : "Deactivated");
+  statusText.concat("</b>\n");    
   statusText.concat("Time: <b>");
   statusText.concat(TimeInitialized ? "Initialized" : "Failed");
   if (TimeInitialized)
     statusText.concat(" (" + GetCurrentTime() + ")");
+  statusText.concat("</b>\n");
+  statusText.concat("Wakeup-Time: <b>");
+  statusText.concat(String(hourToSleep) + " - " + String(hourToKeepAwake));
   statusText.concat("</b>\n");
   statusText.concat("Deepsleep: <b>");
   statusText.concat(skipDeepsleep ? "Skipped" : "Active");

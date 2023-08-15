@@ -94,6 +94,9 @@ void handleNewMessages(int numNewMessages) {
     if (text == "/last")
       SendLastPhoto();
 
+    if(text == "/test")
+      TestSomething(chat_id);
+
     if (text == "/state")
       SendStatus(chat_id, "Current ESP State");
 
@@ -178,8 +181,8 @@ void SendStatus(String chatId, String Text) {
     statusText.concat(" (" + GetCurrentTime() + ")");
   statusText.concat("</b>\n");
   statusText.concat("Wakeup-Time: <b>");
-  statusText.concat(String(hourToSleep) + " - " + String(hourToKeepAwake));
-  statusText.concat("</b>\n");
+  statusText.concat(String(hourToKeepAwake) + " - " + String(hourToSleep));
+  statusText.concat("</b> (" + String(GetSecondsToSleep()) + "s)\n");
   statusText.concat("Deepsleep: <b>");
   statusText.concat(skipDeepsleep ? "Skipped" : "Active");
   statusText.concat("</b>");

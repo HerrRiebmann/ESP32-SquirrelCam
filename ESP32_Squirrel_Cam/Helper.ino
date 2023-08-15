@@ -2,7 +2,7 @@ void PrintMessage(const String &message) {
   if (Serial_Enabled)
     Serial.print(message);
 
-  if(SerialData.length() < SerialDataMaxSize)
+  if (SerialData.length() < SerialDataMaxSize)
     SerialData.concat(message);
 }
 
@@ -10,7 +10,7 @@ void PrintMessageLn() {
   if (Serial_Enabled)
     Serial.println();
 
-  if(SerialData.length() < SerialDataMaxSize)
+  if (SerialData.length() < SerialDataMaxSize)
     SerialData.concat("\r");
 }
 
@@ -19,13 +19,13 @@ void PrintMessageLn(const String &message) {
   if (Serial_Enabled)
     Serial.println();
 
-  if(SerialData.length() < SerialDataMaxSize)
+  if (SerialData.length() < SerialDataMaxSize)
     SerialData.concat("\r");
 }
 
-String GetCurrentTime(){
+String GetCurrentTime() {
   struct tm timeinfo;
-  if(!InitTime(myTimezone))
+  if (!InitTime(myTimezone))
     return "";
   getLocalTime(&timeinfo);
   char timeString[20];
@@ -33,7 +33,7 @@ String GetCurrentTime(){
   return String(timeString);
 }
 
-void SwitchOnBoardLed(bool state) {  
+void SwitchOnBoardLed(bool state) {
   digitalWrite(LED_BUILTIN, state ? LOW : HIGH);
   PrintMessageLn(state ? "LED: On" : "LED: Off");
   LedState = state;
@@ -61,4 +61,16 @@ void CheckIdle() {
 
 void ResetIdleTime() {
   lastActionTime = millis();
+}
+
+void TestSomething(String chatId) {
+  String statusText;
+  hourToKeepAwake = 7;
+  hourToSleep = 21;
+  uint16_t sec = GetSecondsToSleep();
+  statusText = "Don´t wakup for: " + String((int)(sec / 60 / 60)) + ":" + String((int)(sec / 60 % 60));
+  statusText += "\n" + String(sec) + "s";
+  if(sec == secondsToSleep)
+    statusText = "Time not in range!";
+  bot.sendMessage(chatId, statusText, "");
 }

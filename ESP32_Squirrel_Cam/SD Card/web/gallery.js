@@ -55,7 +55,7 @@ function Initialize(){
 		showImages();
 	  }
 	});
-	showImages();
+	showImages();	
 }
 
 // Jump to page
@@ -131,7 +131,7 @@ function showImages() {
 }
 
 // Function to fetch image URLs from a web service
-function fetchImages() {
+function fetchImages() {	
 	var oRequest = new XMLHttpRequest();
 	var sURL  = '/images';	
 	

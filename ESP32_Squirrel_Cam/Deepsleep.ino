@@ -26,7 +26,7 @@ void CheckWakeupMode() {
     case ESP_SLEEP_WAKEUP_TOUCHPAD : //Wakeup caused by touchpad
     case ESP_SLEEP_WAKEUP_ULP : //Wakeup caused by ULP program
     case ESP_SLEEP_WAKEUP_EXT1 : //Wakeup caused by external signal using RTC_CNTL
-      if(!PirActive)
+      if (!PirActive)
         return;
       //Take a picture
       photoWakeup = true;
@@ -41,7 +41,7 @@ void CheckWakeupMode() {
     case ESP_SLEEP_WAKEUP_TIMER : //Wakeup caused by timer
       idleTresholdSeconds = 30;
       break;
-    default : //Wakeup was not caused by deep sleep: Reset/Startup      
+    default : //Wakeup was not caused by deep sleep: Reset/Startup
       //Unintended start: Activate webserver (for at least a minute)
       startWebserver = true;
       idleTresholdSeconds = 60;
@@ -50,21 +50,11 @@ void CheckWakeupMode() {
 }
 
 void SentToDeepSleep() {
-  skipDeepsleep = false;
-  if(TimeInitialized){
-    struct tm timeinfo;
-    getLocalTime(&timeinfo);    
-    if(timeinfo.tm_hour >= hourToKeepAwake && timeinfo.tm_hour <= hourToSleep){
-      if (hourToSleep > timeinfo.tm_hour)
-          secondsToSleep = (((hourToSleep - timeinfo.tm_hour) * 60) - timeinfo.tm_min) * 60;
-        else
-          secondsToSleep = ((((24 - timeinfo.tm_hour) + hourToSleep) * 60) - timeinfo.tm_min) * 60;
-     //PrintMessageLn("Don´t wakup for: %02d:%02d\n", (int)(secondsToSleep / 60 / 60), (int)(secondsToSleep / 60 % 60));
-    }
-  }
+  skipDeepsleep = false;  
+  secondsToSleep = GetSecondsToSleep();
   esp_sleep_enable_timer_wakeup((uint64_t)secondsToSleep * uS_TO_S_FACTOR);
 
-  PrintMessageLn("Going to sleep now for " + String(secondsToSleep) + " Seconds");
+  PrintMessageLn("Going to sleep now for " + String((int)(secondsToSleep / 60 / 60)) + ":" + String((int)(secondsToSleep / 60 % 60)));
   Serial.flush();
 
   if (WiFiConnected) {
@@ -81,4 +71,19 @@ void SetupDeepSleep() {
 
   //Pin 12 = RTC 15
   esp_sleep_enable_ext0_wakeup(GPIO_NUM_12, TriggerState);
+}
+
+uint16_t GetSecondsToSleep(){
+  uint16_t sec = secondsToSleep;
+  if (TimeInitialized) {
+    struct tm timeinfo;
+    getLocalTime(&timeinfo);
+    if (timeinfo.tm_hour <= hourToKeepAwake || timeinfo.tm_hour >= hourToSleep) {
+      if (timeinfo.tm_hour < hourToKeepAwake)
+        sec = (((hourToKeepAwake - timeinfo.tm_hour) * 60) - timeinfo.tm_min) * 60;
+      else
+        sec = ((((24 - timeinfo.tm_hour) + hourToKeepAwake) * 60) - timeinfo.tm_min) * 60;      
+    }
+  }
+  return sec;
 }

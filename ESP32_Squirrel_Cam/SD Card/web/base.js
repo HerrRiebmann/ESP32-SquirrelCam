@@ -15,6 +15,8 @@ function UpdateData(arr){
 	document.getElementById("deepSleep").value = arr[2];
 	document.getElementById("intText").innerHTML = arr[2];
 	document.getElementById("pirActive").checked = arr[3] == '1' ? true : false;
+	document.getElementById("sleepHour").value = arr[4];
+	document.getElementById("wakeupHour").value = arr[5];	
 }
 function GetData(){
 	var oRequest = new XMLHttpRequest();
@@ -41,6 +43,8 @@ function SetData(){
 	sURL += '&skipDeepsleep=' + (document.getElementById("skipDeepsleep").checked ? '1' : '0');	
 	sURL += '&deepSleep=' + document.getElementById("deepSleep").value;	
 	sURL += '&pirActive=' + (document.getElementById("pirActive").checked ? '1' : '0');	
+	sURL += '&wakeupHour=' + document.getElementById("wakeupHour").value;	
+	sURL += '&sleepHour=' + document.getElementById("sleepHour").value;	
 	
 	oRequest.open("GET",sURL,true);
 	oRequest.onload = function (e) {
@@ -98,7 +102,7 @@ function SendToSleep(){
 	oRequest.send(null);
 }
 function FakeData(){
-	var arr = ["1", "1", "120", "1"];
+	var arr = ["1", "1", "120", "1", "7", "21"];
 	return arr;
 }
 function SetOutput(text, error){

@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>ESP32 Squirrel Cam</title>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<link rel="stylesheet" type="text/css" href="web/style.css"/>
+		<link rel="shortcut icon" href="web/favicon.ico" type="image/x-icon"/>
+		<link rel="icon" href="web/favicon.ico" type="image/x-icon"/>
+		<script src="web/upload.js"></script>
+		<script src="web/main.js"></script>
+	</head>
+	<body>
+		<h1>ESP32 Squirrel Cam</h1>
+		<noscript>
+			<h2 style="color:red;">JavaScript is disabled!!!</h2>
+		</noscript>
+		<div id="BurgerMenu">
+			<div class="hamburger" id="hamburger-6" onclick="ToggleBurger()">
+				<span class="line"></span>
+				<span class="line"></span>
+				<span class="line"></span>
+			</div>
+			<div id="myLinks">
+				<button onclick="NavigateMenu('web/gallery.html')">Gallery</button><br/>
+				<button onclick="NavigateMenu('web/stream.html')">Livestream</button><br/>
+				<button onclick="NavigateMenu('web/base.html')">Cam Settings</button><br/>
+				<button onclick="NavigateMenu('web/settings.html')">ESP Settings</button><br/>
+				<button onclick="NavigateMenu('web/files.html')">Files</button><br/>
+				<button onclick="NavigateMenu('web/espinfo.html')">Info</button><br/>
+				<br/>
+				<div class="modal-content">
+					<form action="upload" method="post" enctype="multipart/form-data" id="UploadForm">
+						<div class="upload-btn-wrapper">
+							<button type="submit">Upload</button>
+							<label for="myfile"></label><input type="file" name="myfile" id="uploadFile" onchange="Upload()"/>
+						</div>
+					</form>
+				</div>				
+			</div>
+		</div>
+		<div class="iFrameDiv">	
+		<iframe name="subframe" id="subframe" title="Sub" src="web/stream.html"></iframe>
+		<div class="dimmer">
+			<div class="centered">
+				<div id="fileName"></div>
+				<div id="fileSize"></div>
+				<div id="fileType"></div>
+				<progress id="progress" style="margin-top:10px"></progress>
+			</div>
+		</div>
+		</div>
+	</body>
+</html>

@@ -138,7 +138,8 @@ function fetchImages() {
 	oRequest.open("GET",sURL,true);
 	oRequest.onload = function (e) {
 		if(oRequest.readyState === 4 && oRequest.status === 200){
-			var arr = oRequest.responseText.split("|");	
+			var arr = oRequest.responseText.split("|");
+			arr.sort();
 			for (var i = 0; i < arr.length; i++) {
 			  images.push({
 				title: arr[i].replace("/Photos/picture_", "").replace(".jpg", ""),

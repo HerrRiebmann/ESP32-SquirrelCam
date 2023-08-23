@@ -17,8 +17,16 @@ String getPictureFilename() {
 
 // Take photo and save to microSD card
 void takeSavePhoto() {
+  clearLastPhoto();  
   takePhoto();
   savePhoto();
+}
+
+//When PIR was not triggered from deepsleep, ensure not reading an old image
+void clearLastPhoto(){  
+  //Uncomment the following lines if you're getting old pictures
+  esp_camera_fb_return(fb); // dispose the buffered image
+  fb = NULL; // reset to capture errors
 }
 
 // Take photo and save to microSD card

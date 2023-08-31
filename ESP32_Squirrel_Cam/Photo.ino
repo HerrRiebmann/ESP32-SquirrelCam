@@ -57,7 +57,7 @@ void savePhoto() {
     SendStatus();
     return;
   }
-  if (!WiFiConnected && photoWakeup)
+  if (WiFiConnected && photoWakeup)
     lastPhotoFilename = path;
 
   // Save picture to microSD card

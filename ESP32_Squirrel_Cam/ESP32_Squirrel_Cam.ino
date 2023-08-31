@@ -166,6 +166,10 @@ void CheckPIR() {
     lastDebounceTime = millis();
     return;
   }
+
+  if(photoWakeup)
+    return;
+  
   if ((millis() - lastDebounceTime) > debounceDelay) {
     lastState = currentState;
     lastDebounceTime = millis();
@@ -174,7 +178,7 @@ void CheckPIR() {
   PrintMessage("PIR State changed: ");
   PrintMessageLn(currentState ? "High" : "Low");
   if(!PirActive)
-    return;
+    return;  
   if (currentState == TriggerState)
     takeSavePhoto();
 }

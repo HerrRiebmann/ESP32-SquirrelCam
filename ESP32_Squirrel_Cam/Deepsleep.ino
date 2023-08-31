@@ -32,7 +32,7 @@ void CheckWakeupMode() {
       photoWakeup = true;
       takePhoto();
       //Start Test optimize overexposion
-      esp_camera_fb_return(fb);
+      esp_camera_fb_return(fb);      
       delay(50);
       takePhoto();
       //End Test

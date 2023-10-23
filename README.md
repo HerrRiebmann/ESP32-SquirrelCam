@@ -41,6 +41,7 @@ The last thing was to have a web interface, to control some settings, see or del
 * Open ESP32_Squirrel_Cam.ino
 * Install missing Libraries (_see [below](#Libraries)_)
 * Create an own Library (_see [below](#CustomLibrary)_)
+* Select Board "ESP32 Dev Module" => With PSRAM active (_Needed to use OTA, which won´t work with AI Thinker ESP32-CAM Board_)
 * Upload it onto the ESP32 Cam (_with a programmer or the Cam-Board you can purchase with the Cam-Module_)
 
 ## Hardware

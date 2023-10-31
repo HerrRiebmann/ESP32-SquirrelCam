@@ -296,13 +296,16 @@ bool ProcessETag(const char* ETag) {
   for (int i = 0; i < webServer.headers(); i++) {
     if (webServer.headerName(i).compareTo(F("If-None-Match")) == 0)
       if (webServer.header(i).compareTo(ETag) == 0) {
-        webServer.sendHeader("Cache-Control", "max-age=31536000, immutable");
+        //Images only?!
+        //webServer.sendHeader("Cache-Control", "max-age=31536000, immutable");
+        webServer.sendHeader("Cache-Control", "max-age=31536000");
         webServer.send(304, "text/plain", F("Not Modified"));
         PrintMessageLn(String(F("\t")) + webServer.headerName(i) + F(": ") + webServer.header(i));
         return true;
       }
   }
   webServer.sendHeader("ETag", ETag);
-  webServer.sendHeader("Cache-Control", "max-age=31536000, immutable");
+  //webServer.sendHeader("Cache-Control", "max-age=31536000, immutable");
+  webServer.sendHeader("Cache-Control", "max-age=31536000");
   return false;
 }

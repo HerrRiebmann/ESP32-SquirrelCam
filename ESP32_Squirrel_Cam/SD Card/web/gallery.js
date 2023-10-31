@@ -16,6 +16,7 @@ function Initialize(){
 	gallery = document.getElementById('image-gallery');
 	pageIndicator = document.getElementById('page');
 	galleryDots = document.getElementById('gallery-dots');
+	document.getElementById('loadingCounter').style.display = "none";
 
 	pages = Math.ceil(images.length / perPage);
 	
@@ -132,6 +133,7 @@ function showImages() {
 
 // Function to fetch image URLs from a web service
 function fetchImages() {	
+	document.getElementById('loadingCounter').style.display = "block";
 	var oRequest = new XMLHttpRequest();
 	var sURL  = '/images';	
 	
@@ -150,7 +152,16 @@ function fetchImages() {
 		}
 	};
 	oRequest.onerror = function (e) {
-		
+		document.getElementById('loadingCounter').innerHTML = "Error fetching images!";
+	};
+	oRequest.onprogress = function (e) {
+		const headerLen = 279;
+		const imgLen = 39;
+		if(e.loaded < headerLen)
+			return;
+	  var imageCounter = Math.round((e.loaded - headerLen) / imgLen);
+	  var loadingCounter = document.getElementById('loadingCounter');
+	  loadingCounter.innerHTML = imageCounter;
 	};
 	oRequest.send(null);
 }

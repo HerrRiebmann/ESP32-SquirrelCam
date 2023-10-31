@@ -51,10 +51,10 @@ void CheckWakeupMode() {
 
 void SentToDeepSleep() {
   skipDeepsleep = false;  
-  secondsToSleep = GetSecondsToSleep();
-  esp_sleep_enable_timer_wakeup((uint64_t)secondsToSleep * uS_TO_S_FACTOR);
+  uint16_t sec = GetSecondsToSleep();
+  esp_sleep_enable_timer_wakeup((uint64_t)sec * uS_TO_S_FACTOR);
 
-  PrintMessageLn("Going to sleep now for " + String((int)(secondsToSleep / 60 / 60)) + ":" + String((int)(secondsToSleep / 60 % 60)));
+  PrintMessageLn("Going to sleep now for " + String((int)(sec / 60 / 60)) + ":" + String((int)(sec / 60 % 60)));
   Serial.flush();
 
   if (WiFiConnected) {

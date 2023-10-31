@@ -43,8 +43,8 @@ function SetData(){
 	sURL += '&skipDeepsleep=' + (document.getElementById("skipDeepsleep").checked ? '1' : '0');	
 	sURL += '&deepSleep=' + document.getElementById("deepSleep").value;	
 	sURL += '&pirActive=' + (document.getElementById("pirActive").checked ? '1' : '0');	
-	sURL += '&wakeupHour=' + document.getElementById("wakeupHour").value;	
-	sURL += '&sleepHour=' + document.getElementById("sleepHour").value;	
+	sURL += '&hourToKeepAwake=' + document.getElementById("wakeupHour").value;	
+	sURL += '&hourToSleep=' + document.getElementById("sleepHour").value;	
 	
 	oRequest.open("GET",sURL,true);
 	oRequest.onload = function (e) {

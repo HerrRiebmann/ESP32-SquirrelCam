@@ -64,9 +64,7 @@ void ResetIdleTime() {
 }
 
 void TestSomething(String chatId) {
-  String statusText;
-  hourToKeepAwake = 7;
-  hourToSleep = 21;
+  String statusText;  
   uint16_t sec = GetSecondsToSleep();
   statusText = "Don´t wakup for: " + String((int)(sec / 60 / 60)) + ":" + String((int)(sec / 60 % 60));
   statusText += "\n" + String(sec) + "s";

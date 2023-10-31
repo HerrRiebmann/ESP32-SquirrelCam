@@ -40,6 +40,7 @@ bool setupCamera(bool highRes) {
   config.pin_reset = RESET_GPIO_NUM;
   config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG;
+  
   //init with high specs to pre-allocate larger buffers
   /*
     FRAMESIZE_UXGA (1600 x 1200)
@@ -50,13 +51,12 @@ bool setupCamera(bool highRes) {
     FRAMESIZE_XGA (1024 x 768)
     FRAMESIZE_SXGA (1280 x 1024)
 
-  */
+  */  
   if (highRes && psramFound())  {
     //config.frame_size = FRAMESIZE_UXGA; // FRAMESIZE_ + QVGA|CIF|VGA|SVGA|XGA|SXGA|UXGA
     //Reduce for Telegram
     config.frame_size = FRAMESIZE_SXGA;
     config.jpeg_quality = 10;
-    //config.fb_count = 2;
     config.fb_count = 1;
     Serial.println("High Res");
   }

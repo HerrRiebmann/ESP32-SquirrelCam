@@ -36,7 +36,7 @@ The last thing was to have a web interface, to control some settings, see or del
 *.bin-Files make an OTA Update and resets the ESP afterwards. The website should refresh automatically.
 
 ## Installation
-* Prepare the Arduino IDE for latest ESP32 Boards.
+* Prepare the Arduino IDE for ESP32 Boards (_not latest, better below 2.X_).
 * Copy the /web/-Folder onto the SD-Card.
 * Open ESP32_Squirrel_Cam.ino
 * Install missing Libraries (_see [below](#Libraries)_)
@@ -95,6 +95,13 @@ To create a Telegram Bot, you need to follow some steps:
 4. At last, add a username.
 
 Afterwards, you receive a Token, which must be stored. And the Bot-URL. You can add the Bot to a Chat by following this URL.
-Ensure to setup the Bot to not be added by groups and set some security settings!
+Ensure to setup the Bot to not be added by groups and set some security settings! Your Bot can be found public, but since you only process and send to/from your own personal chat id, no strangers can interact.
 It´s also recommended to also set the command-list with the BotFather. Then you will have a menu with command buttons within your chat.
 I can recommend to follow this [RandomNerdTutorial](https://randomnerdtutorials.com/telegram-control-esp32-esp8266-nodemcu-outputs/)
+
+### ToDo
+- [x] Order Gallery
+- [ ] Do not load all images at once in gallery
+- [ ] Chat Id management to allow others to see images
+- [ ] Prevent sunlight to trigger (by optimizing PIR or on software side)
+- [ ] Etag / Immutable per file

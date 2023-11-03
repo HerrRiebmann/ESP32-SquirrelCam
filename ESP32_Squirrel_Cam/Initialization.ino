@@ -1,18 +1,15 @@
 void InitCam() {
-  if (!setupCamera(CamHighRes)) {
-    uint8_t counter = 0;
-    PrintMessageLn("Camera Setup Failed!");
-    while (!setupCamera(CamHighRes))
-    {
-      counter++;
-      delay(100);
-      if (counter >= 20) {
-        //ESP.restart();
-        return;
-      }
+  for (uint8_t counter = 0; counter <= 10; counter++) {
+    CameraError = setupCamera(CamHighRes);
+    if (CameraError == ESP_OK) {
+      CameraActivated = true;
+      return;
     }
+    delay(200);
   }
-  CameraActivated = true;
+  PrintMessage("Camera init failed with error 0x");
+  PrintMessageLn(String(CameraError, HEX));
+  CameraActivated = false;
 }
 
 // Function to set timezone
@@ -114,4 +111,10 @@ bool initMicroSDCard() {
   }
   PrintMessageLn("Success!");
   return true;
+}
+
+void InitBotUser() {
+  LoadBotUsers();
+  if (!BotUserIsAdmin(MY_CHAT_ID))
+    CreateAdminAccount();
 }

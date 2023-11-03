@@ -31,9 +31,10 @@
 //#define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
 
 #define FLASH_LED_PIN 4
-#define BUTTON_PIN 12
+#define PIR_PIN 12
 #define LED_BUILTIN 33
 #define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
+#define MAX_BOT_USER 20
 
 WiFiClientSecure secured_client;
 UniversalTelegramBot bot(BOT_TOKEN, secured_client);
@@ -51,6 +52,7 @@ bool StreamActive = false;
 bool CameraActivated = false;
 bool CamHighRes = true;
 bool PirActive = true;
+esp_err_t CameraError;
 
 String ssid = WIFI_SSID;
 String password = WIFI_PASSWORD;
@@ -58,6 +60,20 @@ String password = WIFI_PASSWORD;
 //Over the Air Update
 bool UploadIsOTA = false;
 const char deviceNameShort[] = "ESP32 Squirrel Cam";
+
+enum UserType {
+  Empty,
+  Admin,
+  Subscriber,
+  Undefined
+};
+
+typedef struct {
+  unsigned long chatId;
+  UserType userType;
+} user;
+
+user users[MAX_BOT_USER];
 
 enum Filesystems {
   None,
@@ -110,7 +126,7 @@ String lastPhotoFilename = "";
 String currentChat_Id;
 bool startWebserver = false;
 
-bool LedState = true;
+bool LedState = false;
 
 const String PictureFolder = "/Photos";
 
@@ -122,10 +138,11 @@ void setup() {
   pinMode(FLASH_LED_PIN, OUTPUT);
   digitalWrite(FLASH_LED_PIN, flashState);
 
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
-  lastState = !digitalRead(BUTTON_PIN);
+  pinMode(PIR_PIN, INPUT_PULLUP);
+  lastState = !digitalRead(PIR_PIN);
   pinMode(LED_BUILTIN, OUTPUT);
-  
+
+  //Save power to not run into 0x20004 Cam Init Error
   SwitchOnBoardLed(LedState);
 
   SetupDeepSleep();
@@ -139,6 +156,8 @@ void setup() {
     WiFiBegin();
   if (OTA_Enabled)
     SetupOTA();
+    
+  InitBotUser();
   CheckWakeupMode();
   ResetIdleTime();
 }
@@ -160,7 +179,7 @@ void loop() {
 }
 
 void CheckPIR() {  
-  bool currentState = digitalRead(BUTTON_PIN);
+  bool currentState = digitalRead(PIR_PIN);
 
   if (lastState == currentState) {
     lastDebounceTime = millis();

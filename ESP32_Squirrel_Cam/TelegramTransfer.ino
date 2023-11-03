@@ -11,7 +11,7 @@ bool initTelegramTransfer() {
 }
 
 void SendTelegramHeader(size_t photoSize) {
-  String head = "--" + boundary + "\r\nContent-Disposition: form-data; name=\"chat_id\"; \r\n\r\n" + String(MY_CHAT_ID) + "\r\n--" + boundary + "\r\nContent-Disposition: form-data; name=\"photo\"; filename=\"esp32-cam.jpg\"\r\nContent-Type: image/jpeg\r\n\r\n";
+  String head = "--" + boundary + "\r\nContent-Disposition: form-data; name=\"chat_id\"; \r\n\r\n" + String(currentChat_Id) + "\r\n--" + boundary + "\r\nContent-Disposition: form-data; name=\"photo\"; filename=\"esp32-cam.jpg\"\r\nContent-Type: image/jpeg\r\n\r\n";
   String tail = "\r\n--" + boundary + "--\r\n";
 
   unsigned long imageLen = photoSize;

@@ -11,6 +11,7 @@ void WebserverBegin() {
   webServer.on("/flash", handle_flash);
   webServer.on("/sleep", handle_sleep);
   webServer.on("/photo", handle_photo);
+  webServer.on("/user", handle_user);
   webServer.on("/mjpeg/1", HTTP_GET, handle_jpg_stream);
   webServer.on("/jpg", HTTP_GET, handle_jpg);
 
@@ -97,11 +98,11 @@ void handle_base() {
   txt.concat("|");
   txt.concat(String(secondsToSleep));
   txt.concat("|");
-  txt.concat(String(PirActive));  
+  txt.concat(String(PirActive));
   txt.concat("|");
-  txt.concat(String(hourToSleep));  
+  txt.concat(String(hourToSleep));
   txt.concat("|");
-  txt.concat(String(hourToKeepAwake));  
+  txt.concat(String(hourToKeepAwake));
   PrintMessageLn(txt);
   webServer.send(200, "text/plain", txt);
 }
@@ -137,6 +138,23 @@ void handle_photo() {
   takeSavePhoto();
   photoWakeup = false;
   webServer.send(200, "text/plain", "OK");
+}
+
+void handle_user() {
+  PrintMessageLn(F("Handle User"));
+  //user?chatId=123456789&userType=1
+
+  ProcessSetupArguments();
+
+  String txt;
+  for (uint8_t i = 0; i < MAX_BOT_USER; i++)
+    if (users[i].chatId > 0) {
+      txt.concat(String(users[i].chatId));
+      txt.concat("|");
+      txt.concat(String(users[i].userType));
+      txt.concat(";");
+    }
+  webServer.send(200, "text/plain", txt);
 }
 
 void handle_wifi() {
@@ -242,7 +260,7 @@ void handle_esp() {
   webServer.send(200, "text/plain", temp);
 }
 
-void handle_serial() {  
+void handle_serial() {
   ResetIdleTime();
   webServer.send(200, "text/plain", SerialData);
   SerialData = "";
@@ -272,7 +290,7 @@ void redirect() {
 
 void PrintIncomingRequest() {
   ResetIdleTime();
-  
+
   PrintMessageLn(webServer.hostHeader());
   PrintMessage("  ");
   PrintMessageLn(webServer.uri());
@@ -299,7 +317,10 @@ boolean isIp(String str) {
 
 void ProcessSetupArguments() {
   ResetIdleTime();
-  
+
+  unsigned long chatId = 0;
+  int userType = 0;
+
   bool valuesChanged = false;
   for (uint8_t i = 0; i < webServer.args(); i++) {
     PrintMessageLn(String(F(" ")) + webServer.argName(i) + F(": ") + webServer.arg(i));
@@ -331,10 +352,17 @@ void ProcessSetupArguments() {
     if (webServer.argName(i).compareTo(F("hourToKeepAwake")) == 0)
       hourToKeepAwake = webServer.arg(i).toInt();
 
+    if (webServer.argName(i).compareTo(F("chatId")) == 0)
+      chatId = webServer.arg(i).toInt();
+    if (webServer.argName(i).compareTo(F("userType")) == 0)
+      userType = webServer.arg(i).toInt();
+
     valuesChanged = true;
   }
   if (valuesChanged)
     StoreSettings();
+  if (chatId > 0)
+    ProcessBotUser(chatId, userType);
 }
 
 String toStringIp(IPAddress ip) {

@@ -21,14 +21,20 @@ void handleNewMessages(int numNewMessages) {
   PrintMessageLn(String(numNewMessages));
 
   for (int i = 0; i < numNewMessages; i++) {
-    String chat_id = String(bot.messages[i].chat_id);
-    if (chat_id != String(MY_CHAT_ID)) {
-      bot.sendMessage(chat_id, "Unauthorized user", "");
-      PrintMessageLn("Unauthorized user" + String(chat_id));
-      continue;
-    }
+    String chat_id = String(bot.messages[i].chat_id);    
     String text = bot.messages[i].text;
     currentChat_Id = chat_id;
+    
+    if(!BotUserIsAdmin(chat_id)){
+      bot.sendPhoto(chat_id, "https://i.kym-cdn.com/photos/images/newsfeed/000/631/254/eda.jpg", "Unauthorized user\nYou have no power here!");
+      PrintMessageLn("Unauthorized user" + String(chat_id));
+
+      bot.sendMessage(MY_CHAT_ID, "Unauthorized user " + String(chat_id) + "\n" + text, "");
+      
+      if(!BotUserExists(chat_id.toInt()))
+        AddBotUser(chat_id.toInt(), Undefined);
+      continue;
+    }
 
     String from_name = bot.messages[i].from_name;
     if (from_name == "")
@@ -144,7 +150,7 @@ void SendPhotoFromSD(String filepath) {
     PrintMessageLn("Open file failed!");
     return;
   }
-
+  
   if (initTelegramTransfer()) {
     SendTelegramHeader(myFile.size());
     SendTelegramPhotoFromFile();
@@ -168,7 +174,10 @@ void SendStatus(String chatId, String Text) {
   statusText.concat("</b>\n");
   statusText.concat("Camera: <b>");
   statusText.concat(CameraActivated ? "Activated" : "Failed");
-  statusText.concat("</b>\n");
+  if(CameraError == ESP_OK)
+    statusText.concat("</b>\n");
+  else
+    statusText.concat("</b> 0x" + String(CameraError, HEX) + "\n");
   statusText.concat("SD-Card: <b>");
   statusText.concat(FSinitialized ? "Initialized" : "Failed");
   statusText.concat("</b>\n");
@@ -205,9 +214,4 @@ void SendStatus(String chatId, String Text) {
   
   bot.sendMessage(chatId, statusText, "HTML");
   //bot.sendMessage(chatId, statusText, "Markdown");
-
-  //Test:
-  //  if (!WebServerStarted)
-  //    WebserverBegin();
-  //  skipDeepsleep = true;
 }

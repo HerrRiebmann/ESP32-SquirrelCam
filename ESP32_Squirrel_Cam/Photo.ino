@@ -8,22 +8,22 @@ String getPictureFilename() {
   strftime(timeString, sizeof(timeString), "%Y-%m-%d_%H-%M-%S", &timeinfo);
   String filename = PictureFolder;
   filename.concat("/picture_" + String(timeString) + ".jpg");
-  
-  if(!GetFS().exists(PictureFolder))
+
+  if (!GetFS().exists(PictureFolder))
     GetFS().mkdir(PictureFolder);
-  
+
   return filename;
 }
 
 // Take photo and save to microSD card
 void takeSavePhoto() {
-  clearLastPhoto();  
+  clearLastPhoto();
   takePhoto();
   savePhoto();
 }
 
 //When PIR was not triggered from deepsleep, ensure not reading an old image
-void clearLastPhoto(){  
+void clearLastPhoto() {
   //Uncomment the following lines if you're getting old pictures
   esp_camera_fb_return(fb); // dispose the buffered image
   fb = NULL; // reset to capture errors
@@ -113,4 +113,12 @@ void SendLastPhoto() {
   file.close();
   PrintMessageLn();
   SendPhotoFromSD(newestFilename);
+}
+
+void SendPhotoToUser(String filepath) {
+  for (uint8_t i = 0; i < MAX_BOT_USER; i++)
+    if (users[i].chatId > 0 && BotUserIsReceipient(users[i].chatId)) {
+      currentChat_Id = users[i].chatId;
+      SendPhotoFromSD(filepath);
+    }
 }

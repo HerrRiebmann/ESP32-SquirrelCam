@@ -16,7 +16,7 @@
 #define HREF_GPIO_NUM 23
 #define PCLK_GPIO_NUM 22
 
-bool setupCamera(bool highRes) {
+esp_err_t setupCamera(bool highRes) {
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
   config.ledc_timer = LEDC_TIMER_0;
@@ -72,12 +72,12 @@ bool setupCamera(bool highRes) {
   // camera init
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK)  {
-    Serial.printf("Camera init failed with error 0x%x", err);
-    return false;
+    Serial.printf("Camera init failed with error 0x%x", err);    
+    return err;
   }
   sensor_t *s = esp_camera_sensor_get();
   s->set_ae_level(s, -2);
-  return true;
+  return err;
   //Does not work
 /*
   sensor_t *s = esp_camera_sensor_get();

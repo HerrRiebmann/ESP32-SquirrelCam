@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>ESP32 Squirrel Cam</title>
+		<meta charset="UTF-8" />	  
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link rel="stylesheet" type="text/css" href="style.css" />
+      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+      <link rel="icon" href="favicon.ico" type="image/x-icon" />
+      <script src="user.js"></script>
+	</head>
+<body OnLoad="fetchUserData()">
+<center>
+<table id="userTable">
+        <tr>
+            <th>Chat ID</th>
+            <th>Type</th>
+            <th>Action</th>
+        </tr>
+    </table>
+	</center>
+	<p><br/></p>
+    <form id="userForm" onsubmit="addUser()">
+        <input type="number" id="chatId" placeholder="Chat ID">
+        <select id="userType">
+            <option value="0">Empty</option>
+            <option value="1">Admin</option>
+            <option value="2">Subscriber</option>
+            <option value="3">Undefined</option>
+        </select>
+        <button type="submit">Add/Modify</button>
+    </form>
+</body>
+</html>

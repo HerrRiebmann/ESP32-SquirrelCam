@@ -43,7 +43,13 @@ void CheckIdle() {
   if (photoWakeup && WiFiConnected) {
     savePhoto();
     if (lastPhotoFilename != "") {
-      SendPhotoFromSD(lastPhotoFilename);
+      
+      //ToDo: use a list for all subscriber
+//      if(currentChat_Id == "")
+//        currentChat_Id = MY_CHAT_ID;       
+//      SendPhotoFromSD(lastPhotoFilename);
+      SendPhotoToUser(lastPhotoFilename);
+      
       photoWakeup = false;
       lastPhotoFilename = "";
     }
@@ -63,12 +69,13 @@ void ResetIdleTime() {
   lastActionTime = millis();
 }
 
-void TestSomething(String chatId) {
-  String statusText;  
-  uint16_t sec = GetSecondsToSleep();
-  statusText = "Don´t wakup for: " + String((int)(sec / 60 / 60)) + ":" + String((int)(sec / 60 % 60));
-  statusText += "\n" + String(sec) + "s";
-  if(sec == secondsToSleep)
-    statusText = "Time not in range!";
-  bot.sendMessage(chatId, statusText, "");
+void TestSomething(String chatId) {  
+  bot.sendPhoto(chatId, "https://i.kym-cdn.com/photos/images/newsfeed/000/631/254/eda.jpg", "Unauthorized user\nYou have no power here!");
+//  String statusText;  
+//  uint16_t sec = GetSecondsToSleep();
+//  statusText = "Don´t wakup for: " + String((int)(sec / 60 / 60)) + ":" + String((int)(sec / 60 % 60));
+//  statusText += "\n" + String(sec) + "s";
+//  if(sec == secondsToSleep)
+//    statusText = "Time not in range!";
+//  bot.sendMessage(chatId, statusText, "");
 }

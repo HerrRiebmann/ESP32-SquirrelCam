@@ -215,7 +215,7 @@ bool sendDirectory(String path) {
 }
 
 bool sendImages() {
-  PrintMessageLn("Send Images");  
+  PrintMessageLn("Send Images");
   String subdir;
   String parent;
   String name;

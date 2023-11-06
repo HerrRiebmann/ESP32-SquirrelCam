@@ -32,7 +32,7 @@ void CheckWakeupMode() {
       photoWakeup = true;
       takePhoto();
       //Start Test optimize overexposion
-      esp_camera_fb_return(fb);      
+      esp_camera_fb_return(fb);
       delay(50);
       takePhoto();
       //End Test
@@ -50,7 +50,7 @@ void CheckWakeupMode() {
 }
 
 void SentToDeepSleep() {
-  skipDeepsleep = false;  
+  skipDeepsleep = false;
   uint16_t sec = GetSecondsToSleep();
   esp_sleep_enable_timer_wakeup((uint64_t)sec * uS_TO_S_FACTOR);
 
@@ -73,7 +73,7 @@ void SetupDeepSleep() {
   esp_sleep_enable_ext0_wakeup(GPIO_NUM_12, TriggerState);
 }
 
-uint16_t GetSecondsToSleep(){
+uint16_t GetSecondsToSleep() {
   uint16_t sec = secondsToSleep;
   if (TimeInitialized) {
     struct tm timeinfo;
@@ -82,7 +82,7 @@ uint16_t GetSecondsToSleep(){
       if (timeinfo.tm_hour < hourToKeepAwake)
         sec = (((hourToKeepAwake - timeinfo.tm_hour) * 60) - timeinfo.tm_min) * 60;
       else
-        sec = ((((24 - timeinfo.tm_hour) + hourToKeepAwake) * 60) - timeinfo.tm_min) * 60;      
+        sec = ((((24 - timeinfo.tm_hour) + hourToKeepAwake) * 60) - timeinfo.tm_min) * 60;
     }
   }
   return sec;

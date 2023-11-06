@@ -19,16 +19,14 @@
         </tr>
     </table>
 	</center>
-	<p><br/></p>
-    <form id="userForm" onsubmit="addUser()">
-        <input type="number" id="chatId" placeholder="Chat ID">
-        <select id="userType">
-            <option value="0">Empty</option>
-            <option value="1">Admin</option>
-            <option value="2">Subscriber</option>
-            <option value="3">Undefined</option>
-        </select>
-        <button type="submit">Add/Modify</button>
-    </form>
+	<p><br/></p>    
+	<input type="number" id="chatId" placeholder="Chat ID">
+	<select id="userType">
+		<option value="0">Empty</option>
+		<option value="1">Admin</option>
+		<option value="2">Subscriber</option>
+		<option value="3">Undefined</option>
+	</select>
+	<button onclick="addUser()">Add/Modify</button>        
 </body>
 </html>

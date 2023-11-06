@@ -10,12 +10,14 @@ void InitSettings() {
   ssid = settings.getString("ssid", ssid);
   password = settings.getString("password", password);
 
-  CamHighRes = settings.getBool("highRes", CamHighRes);  
+  CamHighRes = settings.getBool("highRes", CamHighRes);
   secondsToSleep = settings.getInt("deepSleep", secondsToSleep);
   PirActive = settings.getBool("PirActive", PirActive);
 
   hourToSleep = settings.getInt("hourToSleep", hourToSleep);
   hourToKeepAwake = settings.getInt("hourToKeepAwake", hourToKeepAwake);
+
+  LastError = settings.getString("LastError", LastError);
 
   settings.end();
   PrintMessageLn("Setting Loaded");
@@ -32,11 +34,13 @@ void StoreSettings() {
   settings.putString("ssid", ssid);
   settings.putString("password", password);
 
-  settings.putBool("highRes", CamHighRes);  
+  settings.putBool("highRes", CamHighRes);
   settings.putInt("deepSleep", secondsToSleep);
-  settings.putBool("PirActive", PirActive);    
+  settings.putBool("PirActive", PirActive);
   settings.putInt("hourToSleep", hourToSleep);
   settings.putInt("hourToKeepAwake", hourToKeepAwake);
+
+  settings.putString("LastError", LastError);
 
   settings.end();
   PrintMessageLn("Settings Stored");

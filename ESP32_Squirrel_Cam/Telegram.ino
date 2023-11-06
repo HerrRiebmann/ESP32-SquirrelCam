@@ -21,17 +21,17 @@ void handleNewMessages(int numNewMessages) {
   PrintMessageLn(String(numNewMessages));
 
   for (int i = 0; i < numNewMessages; i++) {
-    String chat_id = String(bot.messages[i].chat_id);    
+    String chat_id = String(bot.messages[i].chat_id);
     String text = bot.messages[i].text;
     currentChat_Id = chat_id;
-    
-    if(!BotUserIsAdmin(chat_id)){
+
+    if (!BotUserIsAdmin(chat_id)) {
       bot.sendPhoto(chat_id, "https://i.kym-cdn.com/photos/images/newsfeed/000/631/254/eda.jpg", "Unauthorized user\nYou have no power here!");
       PrintMessageLn("Unauthorized user" + String(chat_id));
 
       bot.sendMessage(MY_CHAT_ID, "Unauthorized user " + String(chat_id) + "\n" + text, "");
-      
-      if(!BotUserExists(chat_id.toInt()))
+
+      if (!BotUserExists(chat_id.toInt()))
         AddBotUser(chat_id.toInt(), Undefined);
       continue;
     }
@@ -77,7 +77,7 @@ void handleNewMessages(int numNewMessages) {
       sendToDeepsleepAfterMsgConfirm = true;
     }
 
-    if (text == "/webserver"){
+    if (text == "/webserver") {
       if (!WebServerStarted) {
         WebserverBegin();
         bot.sendMessage(chat_id, "Webserver started: http://" + WiFi.localIP().toString(), "");
@@ -90,21 +90,24 @@ void handleNewMessages(int numNewMessages) {
       }
     }
 
-    if(text == "/pir"){
+    if (text == "/pir") {
       PirActive = !PirActive;
       StoreSettings();
-      bot.sendMessage(chat_id, "PIR is now " + String(!PirActive? "de" : "") + "activated!", "");
-      
+      bot.sendMessage(chat_id, "PIR is now " + String(!PirActive ? "de" : "") + "activated!", "");
+
     }
-    
+
     if (text == "/last")
       SendLastPhoto();
 
-    if(text == "/test")
+    if (text == "/test")
       TestSomething(chat_id);
 
     if (text == "/state")
       SendStatus(chat_id, "Current ESP State");
+
+    if (text == "/user")
+      SendUser(chat_id);
 
     if (text == "/start" || text == "/info")    {
       String welcome = "Welcome to the *ESP32 Squirrel-Cam* Telegram Bot.\n\n";
@@ -150,7 +153,7 @@ void SendPhotoFromSD(String filepath) {
     PrintMessageLn("Open file failed!");
     return;
   }
-  
+
   if (initTelegramTransfer()) {
     SendTelegramHeader(myFile.size());
     SendTelegramPhotoFromFile();
@@ -161,9 +164,27 @@ void SendPhotoFromSD(String filepath) {
 }
 
 void SendStatus() {
-  if (CameraActivated && FSinitialized && TimeInitialized)
+  if (CameraActivated && FSinitialized && TimeInitialized) {
+    if (LastError != "") {
+      LastError = "";
+      StoreSettings();
+    }
     return;
-  SendStatus(MY_CHAT_ID, "Init failed!");
+  }
+
+  String CurrentError;
+  if (!CameraActivated)
+    CurrentError = "Camera " + String(CameraError);
+  if (!FSinitialized)
+    CurrentError = "SD-Card";
+  if (!TimeInitialized)
+    CurrentError = "Timeserver";
+
+  if (CurrentError != "" && CurrentError != LastError)
+    SendStatus(MY_CHAT_ID, "Init failed!");
+
+  LastError = CurrentError;
+  StoreSettings();
 }
 void SendStatus(String chatId, String Text) {
   String statusText;
@@ -174,7 +195,7 @@ void SendStatus(String chatId, String Text) {
   statusText.concat("</b>\n");
   statusText.concat("Camera: <b>");
   statusText.concat(CameraActivated ? "Activated" : "Failed");
-  if(CameraError == ESP_OK)
+  if (CameraError == ESP_OK)
     statusText.concat("</b>\n");
   else
     statusText.concat("</b> 0x" + String(CameraError, HEX) + "\n");
@@ -183,7 +204,7 @@ void SendStatus(String chatId, String Text) {
   statusText.concat("</b>\n");
   statusText.concat("PIR-Sensor: <b>");
   statusText.concat(PirActive ? "Active" : "Deactivated");
-  statusText.concat("</b>\n");    
+  statusText.concat("</b>\n");
   statusText.concat("Time: <b>");
   statusText.concat(TimeInitialized ? "Initialized" : "Failed");
   if (TimeInitialized)
@@ -196,8 +217,8 @@ void SendStatus(String chatId, String Text) {
   statusText.concat(skipDeepsleep ? "Skipped" : "Active");
   statusText.concat("</b>");
   statusText.concat(" (" + String(secondsToSleep) + "sec)");
-  if(skipDeepsleep){
-    statusText.concat("\nAlive: <b>");   
+  if (skipDeepsleep) {
+    statusText.concat("\nAlive: <b>");
     statusText.concat(String((millis() - lastActionTime) / 1000) + "/" + String(secondsToSleepOnIdle));
     statusText.concat("</b>");
   }
@@ -210,8 +231,42 @@ void SendStatus(String chatId, String Text) {
     statusText.concat("\nPhoto: <b>");
     statusText.concat(lastPhotoFilename);
     statusText.concat("</b>");
-  }  
-  
+  }
+
   bot.sendMessage(chatId, statusText, "HTML");
   //bot.sendMessage(chatId, statusText, "Markdown");
+}
+
+void SendUser(String chatId) {
+  String txt;
+  txt.concat("<pre>|   Chat Id  |    Type    | No |\n");
+  txt.concat("|------------|------------|----|\n");
+  for (uint8_t i = 0; i < MAX_BOT_USER; i++)
+    if (users[i].chatId > 0) {
+      txt.concat("| ");
+      for (uint16_t c = String(users[i].chatId).length(); c < 10; c++)
+        txt.concat(" ");
+      txt.concat(String(users[i].chatId));
+      txt.concat(" | ");
+      switch (users[i].userType) {
+        case Admin:
+          txt.concat("   Admin  ");
+          break;
+        case Subscriber:
+          txt.concat("Subscriber");
+          break;
+        case Undefined:
+          txt.concat(" Undefined");
+          break;
+        default:
+          txt.concat("   Empty  ");
+      }
+      if (i < 10)
+        txt.concat(" |  " + String(i));
+      else
+        txt.concat(" | " + String(i));
+      txt.concat(" |\n");
+    }
+  txt.concat("</pre>");
+  bot.sendMessage(chatId, txt, "HTML");
 }

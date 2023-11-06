@@ -5,7 +5,7 @@
 //ESP32 Dev Module => With PSRAM active
 
 //ToDo:
-//Create a "Library": 
+//Create a "Library":
 //"Sketches\libraries\Credentials\Credentials.h" with #define WIFI_SSID, WIFI_PASSWORD, BOT_TOKEN & MY_CHAT_ID
 
 #include <WiFi.h>
@@ -99,6 +99,8 @@ bool Force_Accesspoint = false;
 String SerialData = "";
 const int SerialDataMaxSize = 1000;
 
+String LastError = "";
+
 const unsigned long BOT_MTBS = 1000; // mean time between scan messages
 unsigned long bot_lasttime; // last time messages' scan has been done
 
@@ -156,7 +158,7 @@ void setup() {
     WiFiBegin();
   if (OTA_Enabled)
     SetupOTA();
-    
+
   InitBotUser();
   CheckWakeupMode();
   ResetIdleTime();
@@ -178,7 +180,7 @@ void loop() {
   }
 }
 
-void CheckPIR() {  
+void CheckPIR() {
   bool currentState = digitalRead(PIR_PIN);
 
   if (lastState == currentState) {
@@ -186,9 +188,9 @@ void CheckPIR() {
     return;
   }
 
-  if(photoWakeup)
+  if (photoWakeup)
     return;
-  
+
   if ((millis() - lastDebounceTime) > debounceDelay) {
     lastState = currentState;
     lastDebounceTime = millis();
@@ -196,8 +198,8 @@ void CheckPIR() {
     return;
   PrintMessage("PIR State changed: ");
   PrintMessageLn(currentState ? "High" : "Low");
-  if(!PirActive)
-    return;  
+  if (!PirActive)
+    return;
   if (currentState == TriggerState)
     takeSavePhoto();
 }

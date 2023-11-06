@@ -1,4 +1,5 @@
 void WebserverBegin() {
+  webServer.enableCORS(); //Allow use fetch-api
   webServer.on("/setup", handle_setup);
   webServer.on("/base", handle_base);
   webServer.on("/led", handle_led);

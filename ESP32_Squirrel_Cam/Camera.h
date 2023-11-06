@@ -40,7 +40,7 @@ esp_err_t setupCamera(bool highRes) {
   config.pin_reset = RESET_GPIO_NUM;
   config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG;
-  
+
   //init with high specs to pre-allocate larger buffers
   /*
     FRAMESIZE_UXGA (1600 x 1200)
@@ -51,7 +51,7 @@ esp_err_t setupCamera(bool highRes) {
     FRAMESIZE_XGA (1024 x 768)
     FRAMESIZE_SXGA (1280 x 1024)
 
-  */  
+  */
   if (highRes && psramFound())  {
     //config.frame_size = FRAMESIZE_UXGA; // FRAMESIZE_ + QVGA|CIF|VGA|SVGA|XGA|SXGA|UXGA
     //Reduce for Telegram
@@ -72,24 +72,24 @@ esp_err_t setupCamera(bool highRes) {
   // camera init
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK)  {
-    Serial.printf("Camera init failed with error 0x%x", err);    
+    Serial.printf("Camera init failed with error 0x%x", err);
     return err;
   }
   sensor_t *s = esp_camera_sensor_get();
   s->set_ae_level(s, -2);
   return err;
   //Does not work
-/*
-  sensor_t *s = esp_camera_sensor_get();
-  //initial sensors are flipped vertically and colors are a bit saturated
-  if (s->id.PID == OV3660_PID)
-  {
-    s->set_vflip(s, 1);       //flip it back
-    s->set_brightness(s, 1);  //up the blightness just a bit
-    s->set_saturation(s, -2); //lower the saturation
-  }
-  //drop down frame size for higher initial frame rate
-  s->set_framesize(s, FRAMESIZE_QVGA);
-  return true;
-*/
+  /*
+    sensor_t *s = esp_camera_sensor_get();
+    //initial sensors are flipped vertically and colors are a bit saturated
+    if (s->id.PID == OV3660_PID)
+    {
+      s->set_vflip(s, 1);       //flip it back
+      s->set_brightness(s, 1);  //up the blightness just a bit
+      s->set_saturation(s, -2); //lower the saturation
+    }
+    //drop down frame size for higher initial frame rate
+    s->set_framesize(s, FRAMESIZE_QVGA);
+    return true;
+  */
 }

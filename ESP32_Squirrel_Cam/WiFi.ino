@@ -1,7 +1,7 @@
 void WiFiBegin() {
   //Manually change between WiFi and Accesspoint. AP will be used as a fallback, after 5 seconds
   if (Force_Accesspoint) {
-    CreateAccessPoint();    
+    CreateAccessPoint();
     WebserverBegin();
   }
   else
@@ -37,7 +37,7 @@ void WiFiStateLoop() {
 
   if (millis() - WiFiStart > 10000) {
     PrintMessageLn("Wifi " + ssid + " not found!");
-    CreateAccessPoint();    
+    CreateAccessPoint();
     WebserverBegin();
   }
 }

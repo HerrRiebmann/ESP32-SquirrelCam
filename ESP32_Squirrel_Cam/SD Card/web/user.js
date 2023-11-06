@@ -14,7 +14,7 @@ function displayUserData(userData) {
 }
 
 // Function to fetch and display user data from the web service
-function fetchUserData() {
+function fetchUserData() {	
     fetch("/user")
         .then(response => response.text())
         .then(data => displayUserData(data))
@@ -25,19 +25,32 @@ function fetchUserData() {
 function addUser() {
     const chatId = document.getElementById("chatId").value;
     const userType = document.getElementById("userType").value;
-
-    fetch(`/user?chatId=${chatId}&userType=${userType}`)
-		.then(response => response.text())
-        .then(data => displayUserData(data))
-        .catch(error => console.log(error));
+	updateUser(chatId, userType);    
 }
 
 // Function to remove a user
 function removeUser(chatId) {
-    fetch(`/user?chatId=${chatId}&userType=0`)
-		.then(response => response.text())
-        .then(data => displayUserData(data))
-        .catch(error => console.log(error));
+	updateUser(chatId, 0);    
+}
+
+function updateUser(chatId, userType){
+	var oRequest = new XMLHttpRequest();
+	var sURL  = '/user';
+	if(chatId > 0){
+		sURL  += '?chatId=' + chatId;
+		sURL  += '&userType=' + userType;
+	}
+	
+	oRequest.open("GET",sURL,true);
+	oRequest.onload = function (e) {
+		if(oRequest.readyState === 4 && oRequest.status === 200){			
+			displayUserData(oRequest.responseText);			
+		}
+	};
+	oRequest.onerror = function (e) {
+		console.log("update User failed!")
+	};
+	oRequest.send(null);
 }
 
 // Function to modify a user

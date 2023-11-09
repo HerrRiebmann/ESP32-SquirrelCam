@@ -102,6 +102,6 @@ I can recommend to follow this [RandomNerdTutorial](https://randomnerdtutorials.
 ### ToDo
 - [x] Order Gallery
 - [ ] Do not load all images at once in gallery
-- [ ] Chat Id management to allow others to see images
+- [x] Chat Id management to allow others to see images
 - [ ] Prevent sunlight to trigger (by optimizing PIR or on software side)
-- [ ] Etag / Immutable per file
+- [ ] Etag webfiles / Immutable photo

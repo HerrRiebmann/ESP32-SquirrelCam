@@ -71,6 +71,7 @@ enum UserType {
 typedef struct {
   unsigned long chatId;
   UserType userType;
+  char userName[20];
 } user;
 
 user users[MAX_BOT_USER];

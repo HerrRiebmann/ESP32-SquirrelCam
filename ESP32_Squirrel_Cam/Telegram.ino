@@ -29,10 +29,10 @@ void handleNewMessages(int numNewMessages) {
       bot.sendPhoto(chat_id, "https://i.kym-cdn.com/photos/images/newsfeed/000/631/254/eda.jpg", "Unauthorized user\nYou have no power here!");
       PrintMessageLn("Unauthorized user" + String(chat_id));
 
-      bot.sendMessage(MY_CHAT_ID, "Unauthorized user " + String(chat_id) + "\n" + text, "");
+      bot.sendMessage(MY_CHAT_ID, "Unauthorized user " + bot.messages[i].from_name + " (" + String(chat_id) + ")\n" + text, "");
 
       if (!BotUserExists(chat_id.toInt()))
-        AddBotUser(chat_id.toInt(), Undefined);
+        AddBotUser(chat_id.toInt(), Undefined, bot.messages[i].from_name);
       continue;
     }
 
@@ -232,15 +232,19 @@ void SendStatus(String chatId, String Text) {
     statusText.concat(lastPhotoFilename);
     statusText.concat("</b>");
   }
-
+  if (LastError != "") {
+    statusText.concat("\nLastError: <b>");
+    statusText.concat(LastError);
+    statusText.concat("</b>");
+  }
   bot.sendMessage(chatId, statusText, "HTML");
   //bot.sendMessage(chatId, statusText, "Markdown");
 }
 
 void SendUser(String chatId) {
   String txt;
-  txt.concat("<pre>|   Chat Id  |    Type    | No |\n");
-  txt.concat("|------------|------------|----|\n");
+  txt.concat("<pre>|   Chat Id  |    Type    |    Name    | No |\n");
+  txt.concat(     "|------------|------------|------------|----|\n");
   for (uint8_t i = 0; i < MAX_BOT_USER; i++)
     if (users[i].chatId > 0) {
       txt.concat("| ");
@@ -261,6 +265,10 @@ void SendUser(String chatId) {
         default:
           txt.concat("   Empty  ");
       }
+      txt.concat(" | ");
+      txt.concat(String(users[i].userName));
+      if(strlen(users[i].userName) < 10)
+        txt.concat(String("          ").substring(0, 10 - strlen(users[i].userName)));
       if (i < 10)
         txt.concat(" |  " + String(i));
       else

@@ -10,8 +10,10 @@ void LoadBotUsers() {
     PrintMessage("User ");
     PrintMessage(String(i));
     PrintMessage(": ");
+    PrintMessage(String(users[i].userName));
+    PrintMessage(" (");
     PrintMessage(String(users[i].chatId));
-    PrintMessage(" - ");
+    PrintMessage(") - ");
     switch (users[i].userType) {
       case Admin:
         PrintMessageLn("Admin");
@@ -34,11 +36,12 @@ void StoreBotUsers() {
   settings.end();
 }
 
-bool AddBotUser(long chatId, UserType userType) {
+bool AddBotUser(long chatId, UserType userType, String userName) {
   for (uint8_t i = 0; i < MAX_BOT_USER; i++)
     if (users[i].chatId == 0 && users[i].userType == Empty) {
       users[i].chatId = chatId;
       users[i].userType = userType;
+      userName.toCharArray(users[i].userName, 20);
       StoreBotUsers();
       PrintMessageLn("ChatId " + String(chatId) + " added");
       return true;
@@ -51,15 +54,17 @@ bool RemoveBotUser(long chatId) {
     if (users[i].chatId == chatId) {
       users[i].chatId = 0;
       users[i].userType = Empty;
+      users[i].userName[0] = '\0';
       PrintMessageLn("ChatId " + String(chatId) + " removed");
       return true;
     }
   return false;
 }
-void ChangeBotUser(long chatId, UserType userType) {
+void ChangeBotUser(long chatId, UserType userType, String userName) {
   for (uint8_t i = 0; i < MAX_BOT_USER; i++)
     if (users[i].chatId == chatId) {
       users[i].userType = userType;
+      userName.toCharArray(users[i].userName, 20);
       PrintMessageLn("ChatId " + String(chatId) + " updated");
     }
 }
@@ -70,7 +75,7 @@ bool BotUserExists(long chatId) {
   return false;
 }
 
-void ProcessBotUser(long chatId, int user_type) {
+void ProcessBotUser(long chatId, int user_type, String userName) {
   //Limit to max enum value
   if (user_type > 3)
     user_type = 3;
@@ -82,9 +87,9 @@ void ProcessBotUser(long chatId, int user_type) {
   }
   else {
     if (!BotUserExists(chatId))
-      AddBotUser(chatId, userType);
+      AddBotUser(chatId, userType, userName);
     else
-      ChangeBotUser(chatId, userType);
+      ChangeBotUser(chatId, userType, userName);
   }
   StoreBotUsers();
 }
@@ -111,6 +116,7 @@ bool BotUserIsReceipient(long chatId) {
 void CreateAdminAccount() {
   users[0].chatId = String(MY_CHAT_ID).toInt();
   users[0].userType = Admin;
+  String("Thomas").toCharArray(users[0].userName, 20);
 }
 
 void TestBotUsers() {

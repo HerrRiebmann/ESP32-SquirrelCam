@@ -153,6 +153,8 @@ void handle_user() {
       txt.concat(String(users[i].chatId));
       txt.concat("|");
       txt.concat(String(users[i].userType));
+      txt.concat("|");
+      txt.concat(String(users[i].userName));
       txt.concat(";");
     }
   webServer.send(200, "text/plain", txt);
@@ -321,6 +323,7 @@ void ProcessSetupArguments() {
 
   unsigned long chatId = 0;
   int userType = 0;
+  String userName;
 
   bool valuesChanged = false;
   for (uint8_t i = 0; i < webServer.args(); i++) {
@@ -357,13 +360,15 @@ void ProcessSetupArguments() {
       chatId = webServer.arg(i).toInt();
     if (webServer.argName(i).compareTo(F("userType")) == 0)
       userType = webServer.arg(i).toInt();
+    if (webServer.argName(i).compareTo(F("userName")) == 0)
+      userName = webServer.arg(i);
 
     valuesChanged = true;
   }
   if (valuesChanged)
     StoreSettings();
   if (chatId > 0)
-    ProcessBotUser(chatId, userType);
+    ProcessBotUser(chatId, userType, userName);
 }
 
 String toStringIp(IPAddress ip) {
